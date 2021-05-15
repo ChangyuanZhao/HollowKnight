@@ -145,12 +145,12 @@ def run_episode(hp, algorithm, agent, act_rmp_correct, move_rmp_correct, PASS_CO
 
     for i in range(8):
         if (len(move_rmp_correct) > opt.MEMORY_WARMUP_SIZE):
-            print("move learning")
+            #print("move learning")
             batch_station,batch_actions,batch_reward,batch_next_station,batch_done = move_rmp_correct.sample(opt.BATCH_SIZE)
             algorithm.move_learn(batch_station,batch_actions,batch_reward,batch_next_station,batch_done,opt.BATCH_SIZE)
 
         if (len(act_rmp_correct) > opt.MEMORY_WARMUP_SIZE):
-            print("action learning")
+            #print("action learning")
             batch_station,batch_actions,batch_reward,batch_next_station,batch_done = act_rmp_correct.sample(opt.BATCH_SIZE)
             algorithm.act_learn(batch_station,batch_actions,batch_reward,batch_next_station,batch_done,opt.BATCH_SIZE)
 

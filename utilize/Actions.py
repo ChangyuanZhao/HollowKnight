@@ -34,6 +34,8 @@ F = 0x46
 def Nothing():
     ReleaseKey(LEFT_ARROW)
     ReleaseKey(RIGHT_ARROW)
+    ReleaseKey(UP_ARROW)
+    ReleaseKey(DOWN_ARROW)
     pass
 
 
@@ -62,6 +64,16 @@ def Turn_Right():
     PressKey(RIGHT_ARROW)
     time.sleep(0.01)
     ReleaseKey(RIGHT_ARROW)
+
+
+# 4
+def Turn_Up():
+    PressKey(UP_ARROW)
+
+
+# 5
+def Turn_Down():
+    PressKey(DOWN_ARROW)
 
 
 # ----------------------------------------------------------------------
@@ -221,7 +233,7 @@ def restart():
 Actions = [Attack, Attack_Up,
            Short_Jump, Mid_Jump, Skill_Up,
            Skill_Down, Rush, Cure]
-Directions = [Move_Left, Move_Right, Turn_Left, Turn_Right]
+Directions = [Move_Left, Move_Right, Turn_Left, Turn_Right, Turn_Up, Turn_Down]
 
 
 # Run the action

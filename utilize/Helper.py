@@ -24,14 +24,14 @@ def mean(d):
 def count_self_reward(next_self_blood, self_hp):
     if next_self_blood - self_hp < 0:
         return 11 * (next_self_blood - self_hp)
-    return 0
+    return -1
 
 
 # count boss hp change, and give reward
 def count_boss_reward(next_boss_blood, boss_blood):
     if next_boss_blood - boss_blood < 0:
         return int((boss_blood - next_boss_blood) / 9)
-    return 0
+    return -1
 
 
 def direction_reward(move, player_x, hornet_x):

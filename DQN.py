@@ -38,6 +38,9 @@ class DQN:
         reward = prediction + self.gamma * next_prediction
         label = torch.tensor(label).reshape((1, 1)).squeeze(-1)
         loss = self.act_model.loss_func(label, reward)
+        #print(reward)
+        #print(label)
+        #print(loss)
         return loss
 
     def act_train_model(self, action, features, labels, next_obs, batch_size):
