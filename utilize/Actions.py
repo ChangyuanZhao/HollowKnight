@@ -1,11 +1,10 @@
-# Define the actions we may need during training
-# You can define your actions here
-
 from utilize.SendKey import PressKey, ReleaseKey
 from utilize.WindowsAPI import grab_screen
 import time
 import cv2
 import threading
+from PIL import Image
+import matplotlib.pyplot as plt
 
 
 # Hash code for key we may use: https://docs.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes?redirectedfrom=MSDN
@@ -69,11 +68,12 @@ def Turn_Right():
 # 4
 def Turn_Up():
     PressKey(UP_ARROW)
-
+    time.sleep(0.01)
 
 # 5
 def Turn_Down():
     PressKey(DOWN_ARROW)
+    time.sleep(0.01)
 
 
 # ----------------------------------------------------------------------
@@ -98,19 +98,19 @@ def Attack():
 #     ReleaseKey(DOWN_ARROW)
 #     time.sleep(0.01)
 # 1
-def Attack_Up():
+#def Attack_Up():
     # print("Attack up--->")
-    PressKey(UP_ARROW)
-    PressKey(X)
-    time.sleep(0.11)
-    ReleaseKey(X)
-    ReleaseKey(UP_ARROW)
-    Nothing()
-    time.sleep(0.01)
+ #   PressKey(UP_ARROW)
+  #  PressKey(X)
+   # time.sleep(0.11)
+    #ReleaseKey(X)
+    #ReleaseKey(UP_ARROW)
+    #Nothing()
+    #time.sleep(0.01)
 
 
 # JUMP
-# 2
+# 1
 def Short_Jump():
     PressKey(Z)
     PressKey(DOWN_ARROW)
@@ -122,7 +122,7 @@ def Short_Jump():
     Nothing()
 
 
-# 3
+# 2
 def Mid_Jump():
     PressKey(Z)
     time.sleep(0.2)
@@ -132,17 +132,31 @@ def Mid_Jump():
     ReleaseKey(Z)
     Nothing()
 
+# Rush
+# 3
+def Rush():
+    Nothing()
+    PressKey(C)
+    time.sleep(0.1)
+    ReleaseKey(C)
+    PressKey(X)
+    time.sleep(0.03)
+    Nothing()
+    ReleaseKey(X)
 
 # Skill
 # 4
-# def Skill():
-#     PressKey(Z)
-#     PressKey(X)
-#     time.sleep(0.1)
-#     ReleaseKey(Z)
-#     ReleaseKey(X)
-#     time.sleep(0.01)
-# 4
+def Skill():
+    PressKey(F)
+    #PressKey(X)
+    time.sleep(0.15)
+    ReleaseKey(F)
+    #ReleaseKey(X)
+    Nothing()
+    time.sleep(0.15)
+
+'''
+# 5
 def Skill_Up():
     PressKey(UP_ARROW)
     PressKey(F)
@@ -155,7 +169,7 @@ def Skill_Up():
     time.sleep(0.15)
 
 
-# 5
+# 6
 def Skill_Down():
     PressKey(DOWN_ARROW)
     PressKey(F)
@@ -166,19 +180,7 @@ def Skill_Down():
     ReleaseKey(Z)
     Nothing()
     time.sleep(0.3)
-
-
-# Rush
-# 6
-def Rush():
-    PressKey(C)
-    time.sleep(0.1)
-    ReleaseKey(C)
-    Nothing()
-    PressKey(X)
-    time.sleep(0.03)
-    ReleaseKey(X)
-
+'''
 
 # Cure
 def Cure():
@@ -214,8 +216,13 @@ def restart():
         # 输出格式为 宽 + 高
         station = cv2.resize(cv2.cvtColor(grab_screen(), cv2.COLOR_RGBA2RGB), (1000, 500))
 #        print(station.shape())
+        #plt.imshow(station)
+        #plt.show()
 
         # 对应像素点为白色即选择
+        # 笔记本模式
+        #if station[239][593][0] > 200:
+        # 显示器模式
         if station[238][586][0] > 200:
             # PressKey(DOWN_ARROW)
             # time.sleep(0.1)
@@ -230,9 +237,7 @@ def restart():
 
 
 # List for action functions
-Actions = [Attack, Attack_Up,
-           Short_Jump, Mid_Jump, Skill_Up,
-           Skill_Down, Rush, Cure]
+Actions = [Attack, Short_Jump, Mid_Jump, Rush, Skill, Cure]
 Directions = [Move_Left, Move_Right, Turn_Left, Turn_Right, Turn_Up, Turn_Down]
 
 

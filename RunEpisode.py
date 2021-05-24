@@ -12,6 +12,9 @@ from Agent import Agent
 from utilize.FrameBuffer import FrameBuffer
 from utilize.Helper import mean
 
+Actions = ['Attack',
+           'Short_Jump', 'Mid_Jump', 'Rush', 'Skill', 'Cure']
+Directions = ['Move_Left', 'Move_Right', 'Turn_Left', 'Turn_Right', 'Turn_Up', 'Turn_Down']
 def run_episode(hp, algorithm, agent, act_rmp_correct, move_rmp_correct, PASS_COUNT, opt, pausedact_rmp_wrong=0,
                 move_rmp_wrong=0):
     # 开始挑战
@@ -93,13 +96,13 @@ def run_episode(hp, algorithm, agent, act_rmp_correct, move_rmp_correct, PASS_CO
 
 
         # get reward
-        move_reward = utilize.Helper.move_judge(self_hp, next_self_hp, player_x, next_player_x, hornet_x, next_hornet_x,
+        move_reward = utilize.Helper.move_judge(self_hp, next_self_hp, next_boss_hp_value, boss_hp_value, player_x, player_y, next_player_x, hornet_x, hornet_y, next_hornet_x,
                                              move, hornet_skill1)
         # print(move_reward)
-        act_reward, done = utilize.Helper.action_judge(boss_hp_value, next_boss_hp_value, self_hp, next_self_hp,
+        act_reward, done = utilize.Helper.action_judge(soul, boss_hp_value, next_boss_hp_value, self_hp, next_self_hp,
                                                     next_player_x, next_hornet_x, next_hornet_x, action, hornet_skill1)
         # print(reward)
-        # print( action_name[action], ", ", move_name[d], ", ", reward)
+        print(Actions[action], ", ", act_reward, " , ", Directions[move], ", ", move_reward)
 
         DeleyMoveReward.append(move_reward)
         DeleyActReward.append(act_reward)
@@ -154,6 +157,8 @@ def run_episode(hp, algorithm, agent, act_rmp_correct, move_rmp_correct, PASS_CO
             batch_station,batch_actions,batch_reward,batch_next_station,batch_done = act_rmp_correct.sample(opt.BATCH_SIZE)
             algorithm.act_learn(batch_station,batch_actions,batch_reward,batch_next_station,batch_done,opt.BATCH_SIZE)
 
+    #move_rmp_correct.save("memory")
+    #act_rmp_correct.save("memory")
 
     return total_reward, step, PASS_COUNT, self_hp, boss_hp_value
 

@@ -19,7 +19,7 @@ def grab_screen(region=None):
         width = rect[2] - left
         height = rect[3] - top
 
-
+    #print(left, top, width, height)
     # 返回句柄窗口的设备环境，覆盖整个窗口，包括非客户区，标题栏，菜单，边框
     hwindc = win32gui.GetWindowDC(hwnd)
     #color = win32gui.GetPixel(hwindc, 100 , 200)
@@ -39,10 +39,10 @@ def grab_screen(region=None):
     signedIntsArray = bmp.GetBitmapBits(True)
 
     # 保存并输出截图
-  #  bmpinfo = bmp.GetInfo()
- #   bmpstr = bmp.GetBitmapBits(True)
- #   im_PIL = Image.frombuffer('RGB', (bmpinfo['bmWidth'], bmpinfo['bmHeight']), bmpstr, 'raw', 'BGRX', 0, 1)#    im_PIL.save("im_PIL.png")  # 保存
- #   im_PIL.show()  # 显示
+    #bmpinfo = bmp.GetInfo()
+    #bmpstr = bmp.GetBitmapBits(True)
+    #im_PIL = Image.frombuffer('RGB', (bmpinfo['bmWidth'], bmpinfo['bmHeight']), bmpstr, 'raw', 'BGRX', 0, 1)#    im_PIL.save("im_PIL.png")  # 保存
+    #im_PIL.show()  # 显示
 
     img = np.fromstring(signedIntsArray, dtype='uint8')
 

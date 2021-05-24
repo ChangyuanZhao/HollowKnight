@@ -27,11 +27,11 @@ class config:
         self.HEIGHT = 200
         self.FRAMEBUFFERSIZE = 4
         self.MEMORY_SIZE = 200
-        self.actdim = 7
+        self.actdim = 5
         self.movedim = 6
         self.MEMORY_WARMUP_SIZE = 24 # replay_memory 里需要预存一些经验数据，再从里面sample一个batch的经验让agent去learn
         self.BATCH_SIZE = 10 # 每次给agent learn的数据数量，从replay memory随机里sample一批数据出来
-        self.save_every = 100
+        self.save_every = 10
         self.GAMMA = 0.95
         self.INPUT_SHAPE = (self.FRAMEBUFFERSIZE, self.HEIGHT, self.WIDTH, 3)
         self.LEARNING_RATE = 0.01
@@ -53,7 +53,7 @@ if __name__ == '__main__':
     movemodel = moveNet(opt).to(opt.device)
 
     algorithm = DQN(actmodel, movemodel, opt, gamma=opt.GAMMA, learning_rate=opt.LEARNING_RATE)
-    agent = Agent(opt.actdim, algorithm, opt, e_greed=0.12, e_greed_decrement=1e-6)
+    agent = Agent(opt.actdim, algorithm, opt)
 
     act_rmp_correct = ReplayMemory(opt.MEMORY_SIZE, file_name='./act_memory')  # experience pool
     move_rmp_correct = ReplayMemory(opt.MEMORY_SIZE, file_name='./move_memory')  # experience pool
@@ -77,6 +77,8 @@ if __name__ == '__main__':
         torch.cuda.empty_cache()
         paused = False
         paused = utilize.Helper.pause_game(paused, actmodel, movemodel, episode)
+        agent.e_greed = 0.1 * (0.99)**episode
+
         if episode % opt.save_every == 0:
             torch.save(actmodel.state_dict(), 'model/act_%s' % episode)
             torch.save(movemodel.state_dict(), 'model/move_%s' % episode)

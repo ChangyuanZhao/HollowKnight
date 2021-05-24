@@ -3,11 +3,12 @@ import torch
 import time
 
 class Agent:
-    def __init__(self, act_dim, algorithm, opt, e_greed=0.1, e_greed_decrement=0):
+    def __init__(self, act_dim, algorithm, opt, e_greed=0.1, e_greed_rate=0.99):
         self.act_dim = act_dim
+        self.move_dim = opt.movedim
         self.algorithm = algorithm
         self.e_greed = e_greed
-        self.e_greed_decrement = e_greed_decrement
+        self.e_greed_rate = e_greed_rate
         self.device = opt.device
 
     def sample(self, station, soul, hornet_x, hornet_y, player_x, hornet_skill1):
@@ -33,8 +34,8 @@ class Agent:
 
             # 返回最大值索引
             move = np.argmax(pred_move)
-        self.e_greed = max(
-            0.03, self.e_greed - self.e_greed_decrement)
+
+        self.e_greed = self.e_greed * self.e_greed_rate
 
         # 预测动作
         sample = np.random.rand()
@@ -43,19 +44,13 @@ class Agent:
         else:
             act = np.argmax(pred_act)
 
-            if soul < 33:
-                if act == 4 or act == 5:
-                    pred_act[0][4] = -30
-                    pred_act[0][5] = -30
-            act = np.argmax(pred_act)
-
-        self.e_greed = max(
-            0.03, self.e_greed - self.e_greed_decrement)
         return move, act
 
     # 一定概率以 自定的策略移动
     def better_move(self, hornet_x, player_x, hornet_skill1):
 
+        return np.random.randint(self.move_dim)
+        '''
         dis = abs(player_x - hornet_x)
         dire = player_x - hornet_x
         if hornet_skill1:
@@ -87,33 +82,20 @@ class Agent:
                 return 0
             else:
                 return 1
+        '''
 
     # 一定概率以 自定的策略行动
     def better_action(self, soul, hornet_x, hornet_y, player_x, hornet_skill1):
+        '''
         dis = abs(player_x - hornet_x)
         if hornet_skill1:
             if dis < 3:
                 return 6
             else:
                 return 1
+        '''
+        if soul >= 33:
+            return np.random.randint(self.act_dim)
+        return np.random.randint(self.act_dim - 1)
 
-        if hornet_y > 34 and dis < 5 and soul >= 33:
-            return 4
-
-        if dis < 1.5:
-            return 6
-        elif dis < 5:
-            if hornet_y > 32:
-                return 6
-            else:
-                act = np.random.randint(self.act_dim)
-                if soul < 33:
-                    while act == 4 or act == 5:
-                        act = np.random.randint(self.act_dim)
-                return act
-        elif dis < 12:
-            act = np.random.randint(2)
-            return 2 + act
-        else:
-            return 6
 
